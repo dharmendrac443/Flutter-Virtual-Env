@@ -1,0 +1,113 @@
+{
+  "name": "flutter-env",
+  "displayName": "flutter-env",
+  "description": "Project-local Flutter virtual environment with SDK isolation",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:flutter-env.setupEnvironment",
+    "onCommand:flutter-env.activate"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "flutter-env.setupEnvironment",
+        "title": "Flutter Env: Setup Virtual Environment"
+      },
+      {
+        "command": "flutter-env.activate",
+        "title": "Flutter Env: Activate Environment"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Flutter Env",
+      "properties": {
+        "flutterEnv.flutterVersion": {
+          "type": "string",
+          "default": "stable",
+          "description": "The Flutter SDK version or branch to use (e.g., stable, 3.13.0)."
+        },
+        "flutterEnv.androidSdkPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Android SDK (ANDROID_HOME)."
+        },
+        "flutterEnv.javaHomePath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Java JDK (JAVA_HOME)."
+        },
+        "flutterEnv.envName": {
+          "type": "string",
+          "default": "default",
+          "description": "Name of the Flutter virtual environment (e.g., dev, prod)."
+        },
+        "flutterEnv.autoActivate": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-activate the environment when opening the project."
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "flutterEnvView",
+          "title": "Flutter Env",
+          "icon": "media/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "flutterEnvView": [
+        {
+          "id": "flutterEnvPanel",
+          "name": "Environment Tools",
+          "icon": "media/panel-icon.png"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "node build.js",
+    "start": "nodemon --watch src --exec \"esbuild src/extension.ts --bundle --outfile=dist/extension.js --platform=node --target=node14 --external:vscode && code --extensionDevelopmentPath=.\"",
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.99.1",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.25.1",
+    "esbuild-plugin-copy": "^2.1.1",
+    "eslint": "^9.23.0",
+    "nodemon": "^3.1.9",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.0"
+  }
+}
